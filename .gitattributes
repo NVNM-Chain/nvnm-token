@@ -1,0 +1,8 @@
+* text=auto eol=lf
+
+# Vendored dependencies should not count towards the repository's language
+# statistics or appear in diffs by default.
+lib/** linguist-vendored
+docs/GAS.md linguist-generated
+
+*.sol linguist-language=Solidity

@@ -1,0 +1,168 @@
+# =============================================================================
+#  NVNM Token — Foundry configuration
+#  Docs: https://getfoundry.sh/config/reference/
+#
+#  Everything that influences the produced bytecode is pinned explicitly so
+#  that builds are byte-for-byte reproducible by third parties (auditors,
+#  block explorers, Sourcify). Do not rely on tooling defaults here.
+# =============================================================================
+
+[profile.default]
+  src     = "src"
+  out     = "out"
+  libs    = ["lib"]
+  test    = "test"
+  script  = "script"
+  cache_path = "cache"
+
+  # --- Compiler (pinned; see docs/TRUST-MODEL.md "Compiler policy") ---------
+  solc_version = "0.8.37"
+  evm_version  = "prague"
+  auto_detect_solc = false
+
+  # --- Toolchain behaviour pinned for reproducibility (do not remove) -------
+  # Foundry >= 1.8 auto-detects context-scoped remappings whose context prefix
+  # is the ABSOLUTE build root. Those reach solc's metadata `settings.remappings`
+  # and therefore the CBOR metadata digest, which makes the deployed bytecode a
+  # function of the checkout path and leaks the builder's filesystem layout.
+  # remappings.txt is the single source of truth.
+  auto_detect_remappings = false
+
+  # Foundry 1.8 flipped both of these to true. `isolate` changes every measured
+  # gas figure, and `dynamic_test_linking` moves the `new NVNMToken(...)`
+  # deployment outside the snapshot window (reporting ~2,783 gas for a
+  # 4,537-byte deployment). Pinned to the reviewed behaviour that docs/GAS.md's
+  # methodology section describes; changing either is a deliberate decision that
+  # requires rewriting that section and re-reviewing every number.
+  isolate              = false
+  dynamic_test_linking = false
+
+  # --- Optimizer ------------------------------------------------------------
+  # A fixed-supply token is deployed once and called ~forever, so we optimise
+  # for runtime cost. `via_ir` is deliberately OFF: the legacy pipeline has far
+  # more production mileage and is the code path auditors are used to reading.
+  optimizer      = true
+  optimizer_runs = 1_000_000
+  via_ir         = false
+
+  # --- Reproducible verification -------------------------------------------
+  bytecode_hash = "ipfs"
+  cbor_metadata = true
+
+  # --- Safety ---------------------------------------------------------------
+  # FFI lets tests shell out to arbitrary binaries. Off by default: a malicious
+  # or compromised dependency must not be able to run code on a dev machine.
+  ffi = false
+  # Read-only build artifacts for the deployment verifier; simulation records
+  # are written under deployments/.
+  fs_permissions = [
+    { access = "read", path = "./out" },
+    { access = "read-write", path = "./deployments" },
+  ]
+
+  # --- Diagnostics ----------------------------------------------------------
+  gas_reports = ["NVNMToken"]
+  verbosity   = 1
+  ast         = true
+  build_info  = true
+
+[profile.default.fuzz]
+  runs = 1_000
+  max_test_rejects = 100_000
+
+[profile.default.invariant]
+  runs                  = 256
+  depth                 = 128
+  fail_on_revert        = true
+  call_override         = false
+  shrink_run_limit      = 5_000
+
+# -----------------------------------------------------------------------------
+#  CI profile — slower, stricter. Used by .github/workflows/ci.yml
+# -----------------------------------------------------------------------------
+[profile.ci]
+  verbosity      = 3
+  # Warnings in OUR code fail the build. (`deny_warnings` is deprecated in
+  # favour of `deny = "warnings"` as of Foundry 1.5.)
+  deny           = "warnings"
+  # Warnings originating inside dependencies do not, because they are not
+  # actionable here. Suppressing them by PATH rather than by error code keeps
+  # deny_warnings fully effective for src/, script/ and test/.
+  ignored_warnings_from = ["lib"]
+
+[profile.ci.fuzz]
+  runs = 50_000
+
+[profile.ci.invariant]
+  runs  = 1_000
+  depth = 256
+
+# -----------------------------------------------------------------------------
+#  Fast local loop — do not use for anything that gates a merge.
+# -----------------------------------------------------------------------------
+[profile.lite]
+  optimizer = false
+
+[profile.lite.fuzz]
+  runs = 64
+
+[profile.lite.invariant]
+  runs  = 16
+  depth = 32
+
+# -----------------------------------------------------------------------------
+#  Formatter — `forge fmt`. Enforced in CI via `forge fmt --check`.
+# -----------------------------------------------------------------------------
+[fmt]
+  line_length         = 120
+  tab_width           = 4
+  bracket_spacing     = false
+  int_types           = "long"
+  quote_style         = "double"
+  number_underscore   = "preserve"
+  multiline_func_header = "params_first"
+  sort_imports        = true
+  wrap_comments       = true
+
+# -----------------------------------------------------------------------------
+#  Linter — `forge lint`, which also runs as part of `forge build`.
+#
+#  All rules stay active for src/ and script/, i.e. everything that is deployed
+#  or that signs a transaction. test/ is exempt from the path scan only because
+#  the erc20-unchecked-transfer rule cannot be satisfied inside a
+#  `vm.expectRevert` block (the call reverts, so there is no return value to
+#  check). Test code asserts transfer return values explicitly where it can.
+# -----------------------------------------------------------------------------
+[lint]
+  ignore = ["test/**/*.sol"]
+  lint_on_build = true
+
+[lint.lint_specific]
+  # "NVNM" is the token's name and appears in identifiers throughout. Foundry 1.8
+  # moved this key out of [lint]; the old spelling is silently ignored, which
+  # would let the mixed-case rule fire on every NVNM identifier.
+  mixed_case_exceptions = ["ERC", "URI", "NVNM"]
+
+[doc]
+  out = "docs/src"
+  title = "NVNM Token"
+
+# -----------------------------------------------------------------------------
+#  Networks. RPC URLs come from the environment — never commit an endpoint that
+#  embeds an API key.
+# -----------------------------------------------------------------------------
+[rpc_endpoints]
+  mainnet = "${MAINNET_RPC_URL}"
+  sepolia = "${SEPOLIA_RPC_URL}"
+  hoodi   = "${HOODI_RPC_URL}"
+  base    = "${BASE_RPC_URL}"
+  base_sepolia = "${BASE_SEPOLIA_RPC_URL}"
+  localhost = "http://127.0.0.1:8545"
+
+# One Etherscan V2 key covers every chain listed here, Base included.
+[etherscan]
+  mainnet = { key = "${ETHERSCAN_API_KEY}", chain = 1 }
+  sepolia = { key = "${ETHERSCAN_API_KEY}", chain = 11155111 }
+  hoodi   = { key = "${ETHERSCAN_API_KEY}", chain = 560048, url = "https://api.etherscan.io/v2/api" }
+  base    = { key = "${ETHERSCAN_API_KEY}", chain = 8453, url = "https://api.etherscan.io/v2/api" }
+  base_sepolia = { key = "${ETHERSCAN_API_KEY}", chain = 84532, url = "https://api.etherscan.io/v2/api" }

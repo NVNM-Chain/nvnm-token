@@ -1,0 +1,48 @@
+{
+  "extends": "solhint:recommended",
+  "rules": {
+    "compiler-version": [
+      "error",
+      "0.8.37"
+    ],
+    "func-visibility": [
+      "error",
+      {
+        "ignoreConstructors": true
+      }
+    ],
+    "no-inline-assembly": "error",
+    "avoid-low-level-calls": "error",
+    "avoid-call-value": "error",
+    "avoid-tx-origin": "error",
+    "not-rely-on-time": "warn",
+    "no-complex-fallback": "error",
+    "check-send-result": "error",
+    "reentrancy": "error",
+    "state-visibility": "error",
+    "const-name-snakecase": "error",
+    "contract-name-capwords": "error",
+    "func-name-mixedcase": "error",
+    "imports-on-top": "error",
+    "no-global-import": "error",
+    "no-unused-import": "error",
+    "explicit-types": [
+      "error",
+      "explicit"
+    ],
+    "gas-custom-errors": "off",
+    "max-line-length": [
+      "error",
+      120
+    ],
+    "no-empty-blocks": "off",
+    "ordering": "off",
+    "import-path-check": "off",
+    "no-console": "off",
+    "gas-small-strings": "off",
+    "gas-indexed-events": "off",
+    "use-natspec": "warn",
+    "gas-strict-inequalities": "off",
+    "gas-increment-by-one": "off"
+  }
+}

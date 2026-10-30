@@ -1,0 +1,2 @@
+# Regenerate with: uv pip compile --python-version 3.12 --generate-hashes requirements-security.in -o requirements-security.txt
+slither-analyzer==0.11.6

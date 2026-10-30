@@ -1,0 +1,16 @@
+# Replace these team names if the public organization uses different teams.
+# Multiple owners on one rule do not require one approval from each team.
+* @NVNM-Chain/engineering
+/src/ @NVNM-Chain/engineering @NVNM-Chain/security
+/script/ @NVNM-Chain/engineering @NVNM-Chain/security
+/test/ @NVNM-Chain/engineering @NVNM-Chain/security
+/foundry.toml @NVNM-Chain/engineering @NVNM-Chain/security
+/foundry.lock @NVNM-Chain/engineering @NVNM-Chain/security
+/remappings.txt @NVNM-Chain/engineering @NVNM-Chain/security
+/.gitmodules @NVNM-Chain/engineering @NVNM-Chain/security
+/package*.json @NVNM-Chain/engineering @NVNM-Chain/security
+/requirements-security.* @NVNM-Chain/engineering @NVNM-Chain/security
+/Makefile @NVNM-Chain/engineering @NVNM-Chain/security
+/slither.config.json @NVNM-Chain/engineering @NVNM-Chain/security
+/SECURITY.md @NVNM-Chain/security
+/.github/ @NVNM-Chain/engineering @NVNM-Chain/security

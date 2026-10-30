@@ -1,0 +1,38 @@
+version: 2
+updates:
+  # Pinned action SHAs must be bumped deliberately; Dependabot understands the
+  # "# vX" comment convention and keeps both the SHA and the comment in sync.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(ci)"
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+# Solidity dependencies are deliberately NOT managed here.
+#
+# Dependabot's `gitsubmodule` ecosystem walks commits on the submodule's tracked
+# branch and prefers a semver tag only when that tag's commit lies on the branch
+# it walked (dependabot/dependabot-core#13052). OpenZeppelin publishes releases
+# from `release-v5.x` branches, so v5.7.0 is not an ancestor of `master`, and
+# every run would propose an unreleased `master` HEAD. forge-std's tags do sit
+# on `master`, but it is pinned the same way for consistency.
+#
+# Those bumps cannot compile (master renamed `interfaces/draft-IERC6093.sol`),
+# and they would be unreleased code in any case. No supported option changes this:
+# `versioning-strategy` does not apply to gitsubmodule, and `allow`/`ignore`
+# update-types are semver rules with no semver to match. git submodules are also
+# absent from GitHub's dependency graph, so this ecosystem would produce no
+# Dependabot alerts or security updates — leaving it out costs no security signal.
+#
+# Submodules are bumped by hand to reviewed release tags. `foundry.lock` records
+# the tag and revision, and `make check-deps` enforces it. The "Dependency watch"
+# workflow opens an issue when an upstream release or advisory appears.
+# See CONTRIBUTING.md.

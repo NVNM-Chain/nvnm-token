@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Build, tests and release tooling
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
+        with:
+          version: v1.8.3
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: make check
+
+      # The reproducibility promise in foundry.toml has to be tested, not asserted.
+      # Foundry >= 1.8 auto-detects context-scoped remappings keyed by the ABSOLUTE
+      # build root; left on, they reach contract metadata and make the deployed
+      # bytecode a function of the checkout path. `auto_detect_remappings = false`
+      # prevents that, and this step is what proves it stays prevented.
+      - name: Deployed bytecode is independent of the build root
+        run: |
+          set -euo pipefail
+          runtime() {
+            python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['deployedBytecode']['object'])" "$1"
+          }
+          forge build --force
+          runtime out/NVNMToken.sol/NVNMToken.json > /tmp/root-a.hex
+          mkdir -p /tmp/nvnm-different-build-root
+          tar cf - --exclude=./out --exclude=./cache --exclude=./.git . \
+            | (cd /tmp/nvnm-different-build-root && tar xf -)
+          cd /tmp/nvnm-different-build-root
+          forge build --force
+          runtime out/NVNMToken.sol/NVNMToken.json > /tmp/root-b.hex
+          if ! diff -q /tmp/root-a.hex /tmp/root-b.hex; then
+            echo "FAIL: deployed bytecode depends on the absolute build root."
+            echo "      Check auto_detect_remappings in foundry.toml."
+            exit 1
+          fi
+          echo "OK: deployed bytecode is identical across build roots."
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
+        with:
+          version: v1.8.3
+      - run: make coverage
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: lcov
+          path: lcov.info
+          if-no-files-found: error

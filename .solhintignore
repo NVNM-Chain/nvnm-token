@@ -1,0 +1,6 @@
+lib/
+out/
+cache/
+# Tests legitimately use low-level calls to prove that an entrypoint does NOT
+# exist, and use inline patterns solhint flags in production code.
+test/

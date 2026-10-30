@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "status": "confirmed",
+  "chainId": 11155111,
+  "token": "0x51307001c9ac37d35fb9bd3b39e216eec6e01bc7",
+  "deployer": "0x40e511f03df69f35c778411c9bdd2e2cbfc6b445",
+  "treasury": "0x40e511f03df69f35c778411c9bdd2e2cbfc6b445",
+  "initialSupply": "1000000000000000000000000000",
+  "observation": {
+    "blockNumber": "12017022",
+    "blockHash": "0x662a5d06825c90489c4e4f062dd568988110221b84d7f198161b79a81dc9fbf9",
+    "finality": "finalized"
+  },
+  "transaction": {
+    "hash": "0xa5e15d5d9ef09f108f78589841d1a21016544c513b8c0c91e0920f16c55e171b",
+    "blockNumber": "12017021",
+    "blockHash": "0x1b6c212723338956750c6f2f6abd304fa788628a0209a39214539abcf47b2b74"
+  },
+  "codeHash": "0x068755a5a1d62a6269245a0cbf4ddb7d5d95a7645b379f8525af18dc20f767fd",
+  "provenance": {
+    "sourceCommit": "e2198904c04fa5521e6f47ff0721f0dab4b3ae9b",
+    "sourceTree": "ce85b249aa2213a80a7247e8f5157a61507f3782",
+    "submodules": [
+      "bf647bd6046f2f7da30d0c2bf435e5c76a780c1b lib/forge-std (v1.16.2)",
+      " cab19933c33c2ad1d4c7a84864a3601dddfd16f3 lib/openzeppelin-contracts (v4.8.0-1217-gcab19933)",
+      " 232ff9ba8194e406967f52ecc5cb52ed764209e9 lib/openzeppelin-contracts/lib/erc4626-tests (v0.1.1)",
+      " 1801b0541f4fda118a10798fd3486bb7051c5dd6 lib/openzeppelin-contracts/lib/forge-std (v1.14.0)",
+      " 7328abe100445fc53885c21d0e713b95293cf14c lib/openzeppelin-contracts/lib/halmos-cheatcodes (7328abe)"
+    ],
+    "compiler": {
+      "version": "0.8.37+commit.f401782d"
+    },
+    "settings": {
+      "remappings": [
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "forge-std/=lib/forge-std/src/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 1000000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/NVNMToken.sol": "NVNMToken"
+      },
+      "evmVersion": "prague",
+      "libraries": {}
+    },
+    "artifacts": {
+      "out/NVNMToken.sol/NVNMToken.json": "ae768c980374764d863185e23452c6461a65e750332676e597c3ea487e598c37",
+      "out/EIP712.sol/EIP712.json": "82fa77c6dd85212469823117d9f472e9ad7a39c905c444d84d75d44f48f7aa44"
+    },
+    "sources": {
+      "lib/openzeppelin-contracts/contracts/interfaces/IERC5267.sol": "0xfb223a85dd0b2175cfbbaa325a744e2cd74ecd17c3df2b77b0722f991d2725ee",
+      "lib/openzeppelin-contracts/contracts/interfaces/draft-IERC6093.sol": "0x1b88b3fb3d85ba5496d7d5f396f83ee1fddcdd6762059ff65992655b67920998",
+      "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol": "0x669464167428061ee0f8618b73b3ee90aff8405683e7ddde8cd77dadaa1afe29",
+      "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+      "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Permit.sol": "0x73d9dc25e0edb50767d29665bea0092e29b68776feb39c3f48781e4bab7cdda5",
+      "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol": "0xd6fa4088198f04eef10c5bce8a2f4d60554b7ec4b987f684393c01bf79b94d9f",
+      "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Permit.sol": "0x53befc41288eaa87edcd3a7be7e8475a32e44c6a29f9bf52fae789781301d9ff",
+      "lib/openzeppelin-contracts/contracts/utils/Bytes.sol": "0xa34f1a24f9138bd6bafa5b6cf5d513a45097266204caa1b3e5038e728bfe45b4",
+      "lib/openzeppelin-contracts/contracts/utils/Context.sol": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+      "lib/openzeppelin-contracts/contracts/utils/Nonces.sol": "0xd9dcb3e080c243a82ecb84ab19261f3b1ba79810f4592a375a26368c20f97293",
+      "lib/openzeppelin-contracts/contracts/utils/Panic.sol": "0xf7fe324703a64fc51702311dc51562d5cb1497734f074e4f483bfb6717572d7a",
+      "lib/openzeppelin-contracts/contracts/utils/ShortStrings.sol": "0x818c1d828c45953bff1ff6e2714d6d41f8f731f9fc3ed15005af0ac881510f30",
+      "lib/openzeppelin-contracts/contracts/utils/StorageSlot.sol": "0xcf74f855663ce2ae00ed8352666b7935f6cddea2932fdf2c3ecd30a9b1cd0e97",
+      "lib/openzeppelin-contracts/contracts/utils/Strings.sol": "0x1fdc2de9585ab0f1c417f02a873a2b6343cd64bb7ffec6b00ffa11a4a158d9e8",
+      "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol": "0x00de000d6004a92cb99f62dd6956c579551d805705122ef05fbd23bef039825b",
+      "lib/openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol": "0xd52a80195641d334b966a1fc02714cda8921cc260d6a6a6943e622cf878236a8",
+      "lib/openzeppelin-contracts/contracts/utils/cryptography/MessageHashUtils.sol": "0x6d8579873b9650426bfbd2a754092d1725049ca05e4e3c8c2c82dd9f3453129d",
+      "lib/openzeppelin-contracts/contracts/utils/math/Math.sol": "0x59973a93b1f983f94e10529f46ca46544a9fec2b5f56fb1390bbe9e0dc79f857",
+      "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol": "0xc8cae21c9ae4a46e5162ff9bf5b351d6fa6a6eba72d515f3bc1bdfeda7fdf083",
+      "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol": "0xb1970fac7b64e6c09611e6691791e848d5e3fe410fa5899e7df2e0afd77a99e3",
+      "src/NVNMToken.sol": "0xd2904c5f84d9c10aff6cc824ca94a80e6585d530b97e46d24826d1b878061c55"
+    }
+  }
+}
