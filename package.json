@@ -5,6 +5,6 @@
   "license": "MIT",
   "engines": { "node": ">=24 <25" },
   "devDependencies": {
-    "solhint": "6.2.4"
+    "solhint": "6.2.5"
   }
 }
